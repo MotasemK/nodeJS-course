@@ -2,17 +2,13 @@
 
 // const mongodb = require("mongodb");
 // const MongoClient = mongodb.MongoClient;
-// const ObjectID = mongodb.ObjectId
+// const ObjectId = mongodb.ObjectId
 
 const { MongoClient, ObjectId } = require("mongodb");
 
 // localhost ip = 127.0.0.1
 const connectionURL = "mongodb://127.0.0.1:27017";
 const databaseName = "task-manager";
-
-const id = new ObjectId();
-console.log(id.id);
-console.log(id.getTimestamp());
 
 MongoClient.connect(
   connectionURL,
@@ -24,64 +20,31 @@ MongoClient.connect(
 
     const db = client.db(databaseName);
     /*
-    db.collection("users").insertOne(
-      {
-        _id: id,
-        name: "bashar",
-        age: 29,
-      },
-      (error, result) => {
+    db.collection("users").findOne(
+      { _id: new ObjectId("611a1b3303a324a2cb51e7bd") },
+      (error, user) => {
         if (error) {
-          return console.log("Unable to insert user");
+          return console.log("Unable to fetch");
         }
 
-        console.log(result.insertedId);
+        console.log(user);
       }
     );
 */
-    /*db.collection("users").insertMany(
-      [
-        {
-          name: "Fayez",
-          age: 25,
-        },
-        {
-          name: "Majd",
-          age: 24,
-        },
-      ],
-      (error, result) => {
-        if (error) {
-          return console.log("Unable to insert user");
-        }
 
-        console.log(result.insertedIds);
-      }
-    );*/
-    /*
-    db.collection("tasks").insertMany(
-      [
-        {
-          description: "covering mongodb",
-          completed: false,
-        },
-        {
-          description: "Studying NodeJS",
-          completed: false,
-        },
-        {
-          description: "Going to gym",
-          completed: true,
-        },
-      ],
-      (error, result) => {
-        if (error) {
-          return console.log("Unable to insert user");
-        }
+    // returns cursor refers to the data location in the database
+    /*     
+     db.collection("users")
+      .find({ age: 25 })
+      .toArray((error, users) => {
+        console.log(users);
+      });
+*/
 
-        console.log(result.insertedIds);
-      }
-    );
-    */
+    db.collection("tasks")
+      .find({ completed: false })
+      .toArray((error, tasks) => {
+        console.log(tasks);
+      });
   }
 );
