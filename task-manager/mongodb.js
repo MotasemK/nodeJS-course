@@ -19,32 +19,41 @@ MongoClient.connect(
     }
 
     const db = client.db(databaseName);
-    /*
-    db.collection("users").findOne(
-      { _id: new ObjectId("611a1b3303a324a2cb51e7bd") },
-      (error, user) => {
-        if (error) {
-          return console.log("Unable to fetch");
-        }
 
-        console.log(user);
-      }
-    );
-*/
-
-    // returns cursor refers to the data location in the database
-    /*     
-     db.collection("users")
-      .find({ age: 25 })
-      .toArray((error, users) => {
-        console.log(users);
-      });
-*/
+    // db.collection("users")
+    //   .updateOne(
+    //     {
+    //       _id: new ObjectId("61196672e5b97ddaa775a893"),
+    //     },
+    //     {
+    //       $set: {
+    //         name: "Mike",
+    //       },
+    //     }
+    //   )
+    //   .then((result) => {
+    //     console.log(result);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
 
     db.collection("tasks")
-      .find({ completed: false })
-      .toArray((error, tasks) => {
-        console.log(tasks);
+      .updateMany(
+        {
+          completed: false,
+        },
+        {
+          $set: {
+            completed: true,
+          },
+        }
+      )
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }
 );
