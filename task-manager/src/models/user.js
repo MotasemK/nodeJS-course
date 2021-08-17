@@ -51,6 +51,17 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+// When we use res.send() json.stringify will run with these options below
+userSchema.methods.toJSON = function () {
+  const user = this;
+  const userObject = user.toObject();
+
+  delete userObject.password;
+  delete userObject.tokens;
+
+  return userObject;
+};
+
 // methods available inside the instances
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
