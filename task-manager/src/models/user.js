@@ -51,6 +51,13 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+// virtual propery its not stored in the database its just for mongoose refrence to whos own what and how they related
+userSchema.virtual("myTasks", {
+  ref: "Task",
+  localField: "_id", // users id is the relationship between users and tasks
+  foreignField: "owner", // name of the field in the other thing
+});
+
 // When we use res.send() json.stringify will run with these options below
 userSchema.methods.toJSON = function () {
   const user = this;
