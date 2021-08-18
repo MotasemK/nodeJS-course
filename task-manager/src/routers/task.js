@@ -29,10 +29,42 @@ router.post("/tasks", auth, async (req, res) => {
   }
 });
 
+// FILTERING.
+// GET /tasks?completed=false
+
+// LIMITING DATA.
+// GET /tasks?limit=10&skip=
+
+// SORTING.
+// GET /tasks?sortBy=createdAt:desc
+
 router.get("/tasks", auth, async (req, res) => {
+  const match = {};
+  const sort = {};
+
+  if (req.query.completed) {
+    // to transform the string to boolean
+    match.completed = req.query.completed === "true";
+  }
+
+  if (req.query.sortBy) {
+    const parts = req.query.sortBy.split(":");
+    sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
+  }
+
   try {
     // const tasks = await Task.find({ owner: req.user._id });
-    await req.user.populate("myTasks").execPopulate();
+    await req.user
+      .populate({
+        path: "myTasks",
+        match,
+        options: {
+          limit: parseInt(req.query.limit),
+          skip: parseInt(req.query.skip),
+          sort,
+        },
+      })
+      .execPopulate();
     res.send(req.user.myTasks);
   } catch (e) {
     res.status(500).send();
