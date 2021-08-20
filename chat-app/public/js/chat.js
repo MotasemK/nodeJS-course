@@ -11,3 +11,17 @@ document.querySelector("#message-form").addEventListener("submit", (e) => {
 
   socket.emit("sendMessage", message);
 });
+
+document.querySelector("#send-location").addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    return alert("Geolocation is not supported by your browser");
+  }
+
+  navigator.geolocation.getCurrentPosition((position) => {
+    const location = {
+      lat: position.coords.latitude,
+      long: position.coords.longitude,
+    };
+    socket.emit("sendLocation", location);
+  });
+});
